@@ -17,7 +17,7 @@ from src.pdf_service import PdfService
 
 pdfs = PdfService(key="TEST_KEY")
 
-data = pdfs.extract(file_path="/home/coderpad/data/apple.pdf")
+data = pdfs.extract(file_path="assets/retailco.pdf")
 
 print(data)
 ```

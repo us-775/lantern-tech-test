@@ -11,7 +11,7 @@ class PdfService:
 
     def extract(self, file_path: str):
 
-        if file_path == "/home/coderpad/data/healthinc.pdf":
+        if file_path == "assets/healthinc.pdf":
             return {
                 'Company Name': 'HealthInc',
                 'Industry': 'Healthcare',
@@ -34,7 +34,7 @@ class PdfService:
                 'Number of Employees': 3000,
             }
 
-        if file_path == "/home/coderpad/data/retailco.pdf":
+        if file_path == "assets/retailco.pdf":
             return {
                 'Company Name': 'RetailCo',
                 'Industry': 'Retail',
@@ -57,7 +57,7 @@ class PdfService:
                 'Number of Employees': 2000,
             }
 
-        if file_path == "/home/coderpad/data/financellc.pdf":
+        if file_path == "assets/financellc.pdf":
             return {
                 'Company Name': 'FinanceLLC',
                 'Industry': 'Financial Services',
