@@ -36,3 +36,15 @@ was generated using version `1.8.3`
 
 Alternatively it's possible to `pip install` directly using the
 `pyproject.toml` or `requirements.txt`.
+
+
+## Usage
+After starting the app by running `make dev`, navigate to http://localhost:8000/docs where you can use the new endpoint. Use 'abc123' as the API key in the header `X-API-Key`.
+
+## Notes
+* I changed pdf_service.py slightly to make the if conditions work with my endpoint code.
+* Even though the pdf service has been mocked for simplicity, I decided to mock it in the tests anyway to treat it as an external service. Unit tests should not make real calls to external services so that's why mocking should be done.
+* The PDF service is instantiated with a literal string passed for the key. A better way to do this would be to fetch the value from the environment variables to avoid hardcoding the key.
+
+## Additional dependencies added
+* I added ruff and isort for code formatting purposes.

@@ -2,7 +2,7 @@
 name = "python-coding-test"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Uttam Sharma <u.sharma1@outlook.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
