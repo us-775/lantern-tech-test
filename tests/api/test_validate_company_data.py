@@ -31,6 +31,7 @@ class TestAPI(unittest.TestCase):
         "CEO": "Bob Johnson",
         "Number of Employees": 2000,
     }
+    DEFAULT_HEADERS = {"X-API-Key": "abc123"}
 
     @patch("src.logic.PdfService")
     def test_valid_file(self, mock_pdf_service):
@@ -41,10 +42,13 @@ class TestAPI(unittest.TestCase):
         with open(filepath, "rb") as f:
             files = {"pdf_file": f}
             response = client.post(
-                "/extract-and-compare", params={"company_name": "RetailCo"}, files=files
+                "/extract-and-compare",
+                params={"company_name": "RetailCo"},
+                files=files,
+                headers=self.DEFAULT_HEADERS,
             )
 
-        assert response.status_code == 200
+        assert response.status_code == 200, response.status_code
         expected_response = [
             {
                 "field": "CEO",
@@ -185,10 +189,13 @@ class TestAPI(unittest.TestCase):
         with open(filepath, "rb") as f:
             files = {"pdf_file": f}
             response = client.post(
-                "/extract-and-compare", params={"company_name": "foobar"}, files=files
+                "/extract-and-compare",
+                params={"company_name": "foobar"},
+                files=files,
+                headers=self.DEFAULT_HEADERS,
             )
 
-        assert response.status_code == 400
+        assert response.status_code == 400, response.status_code
         assert response.json() == {
             "detail": "Could not extract data from PDF file 'file_that_cant_be_scraped.pdf'"
         }
@@ -204,12 +211,38 @@ class TestAPI(unittest.TestCase):
                 "/extract-and-compare",
                 params={"company_name": "Bad Company Name"},
                 files=files,
+                headers=self.DEFAULT_HEADERS,
             )
 
-        assert response.status_code == 404
+        assert response.status_code == 404, response.status_code
         assert response.json() == {
             "detail": "Data for company 'Bad Company Name' does not exist in database"
         }
+
+    def test_no_api_key(self):
+        filepath = TESTDATA_DIR / "retailco.pdf"
+        with open(filepath, "rb") as f:
+            files = {"pdf_file": f}
+            response = client.post(
+                "/extract-and-compare",
+                params={"company_name": "Bad Company Name"},
+                files=files,
+            )
+
+        assert response.status_code == 403, response.status_code
+
+    def test_invalid_api_key(self):
+        filepath = TESTDATA_DIR / "retailco.pdf"
+        with open(filepath, "rb") as f:
+            files = {"pdf_file": f}
+            response = client.post(
+                "/extract-and-compare",
+                params={"company_name": "Bad Company Name"},
+                files=files,
+                headers={"X-API-Key": "bad-key"},
+            )
+
+        assert response.status_code == 401, response.status_code
 
 
 if __name__ == "__main__":

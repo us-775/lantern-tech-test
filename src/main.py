@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, UploadFile
 
+from src.auth import check_api_key
 from src.logic import (CompanyDataUnavailable,
                        extract_and_compare_company_data_against_db)
 from src.models import DataComparison
@@ -12,7 +13,11 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/extract-and-compare", summary="Extract and company data")
+@app.post(
+    "/extract-and-compare",
+    summary="Extract and company data",
+    dependencies=[Depends(check_api_key)],
+)
 def compare_with_existing_company_data(
     company_name: str, pdf_file: UploadFile
 ) -> list[DataComparison]:
